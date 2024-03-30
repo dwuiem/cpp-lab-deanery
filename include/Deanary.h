@@ -6,8 +6,21 @@
 #define DEANERY_DEANARY_H
 
 
-class Deanary {
+class Group;
+class Student;
 
+class Deanary {
+public:
+    std::vector<Group*> groups;
+    void createGroups();
+    void hireStudents();
+    void fireStudents();
+    void addMarksToAll();
+    void getStatistics();
+    void moveStudents();
+    void printInfo();
+private:
+    void saveData();
 };
 
 
