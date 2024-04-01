@@ -7,20 +7,32 @@
 
 
 class Group;
+
 class Student;
 
 class Deanary {
-public:
-    std::vector<Group*> groups;
-    void createGroups();
-    void hireStudents();
-    void fireStudents();
-    void addMarksToAll();
-    void getStatistics();
-    void moveStudents();
-    void printInfo();
 private:
+    std::vector<Group *> groups;
+
     void saveData();
+
+    Group *getGroup(const std::string& title);
+
+public:
+
+    Deanary() = default;
+
+    void hireStudents();
+
+    void fireStudents();
+
+    void addMarksToAll();
+
+    void getStatistics();
+
+    void moveStudents();
+
+    void printInfo();
 };
 
 

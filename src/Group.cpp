@@ -25,15 +25,15 @@ void Group::removeStudent(Student &studentRef) {
     }
 }
 
-void Group::chooseHead(Student &headRef) {
+void Group::chooseHead(const Student &headRef) {
     this->head = &headRef;
 }
 
 double Group::getAverageMark() const {
     double markSummary = 0;
     double markAmount = 0;
-    for (Student* student : students) {
-        for (int mark : student->marks) {
+    for (const Student *student: students) {
+        for (int mark: student->marks) {
             markSummary += mark;
             markAmount++;
         }
@@ -59,7 +59,7 @@ Group::Group() {
 }
 
 Student *Group::getStudent(int id) {
-    for (Student* student : students) {
+    for (auto student : students) {
         if (student->id == id) {
             return student;
         }
@@ -68,7 +68,7 @@ Student *Group::getStudent(int id) {
 }
 
 Student *Group::getStudent(std::string fio) {
-    for (Student* student : students) {
+    for (auto student: students) {
         if (student->fio == fio) {
             return student;
         }

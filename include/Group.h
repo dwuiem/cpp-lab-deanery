@@ -7,27 +7,45 @@
 
 
 class Deanary;
+
 class Student;
 
 class Group {
 public:
     std::string title;
     std::string spec;
-    std::vector<Student*> students;
-    Student* head;
+    std::vector<Student *> students;
+    const Student *head = nullptr;
+
     Group();
+
     Group(std::string title, std::string spec) : title(std::move(title)), spec(std::move(spec)) {};
+
     Group(const Group &groupRef) = default;
+
     Group(Group &&groupRef) = default;
+
+    ~Group() = default;
+
+    Group &operator=(const Group &other) = default;
+
     void addStudent(Student &studentRef);
+
     void removeStudent(Student &studentRef);
-    void chooseHead(Student &headRef);
+
+    void chooseHead(const Student &headRef);
+
     double getAverageMark() const;
+
     bool isEmpty() const;
+
     bool containsStudent(int id);
+
     bool containsStudent(std::string fio);
-    Student* getStudent(int id);
-    Student* getStudent(std::string fio);
+
+    Student *getStudent(int id);
+
+    Student *getStudent(std::string fio);
 };
 
 

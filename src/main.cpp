@@ -8,5 +8,8 @@
 #include "Group.h"
 
 int main() {
+    Deanary deanary;
+    deanary.hireStudents();
+    deanary.printInfo();
     return 0;
 }
