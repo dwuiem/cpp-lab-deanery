@@ -86,11 +86,13 @@ void Deanary::moveStudents(const std::string &oldGroup, const std::string &newGr
 
 void Deanary::printInfo() {
     using std::cout, std::cin, std::endl;
-    cout << "---------------------- DEANERY INFO ----------------------" << endl;
+    cout << "------------------ DEANERY INFO ------------------" << endl;
     for (auto group : groups) {
         if (!group->isEmpty()) {
-            cout << "Group - " << group->getTitle() << " (spec: " << group->getSpec() << ") - HEAD: "
-                 << (group->getHead() == nullptr ? "NONE" : group->getHead()->getFio()) << endl;
+            cout << "Group - " << group->getTitle()
+            << " (spec: " << group->getSpec() << ") - HEAD: "
+            << (group->getHead() == nullptr ? "NONE" : group->getHead()->getFio())
+            << endl;
             cout << "AVG mark of group: " << group->getAverageMark() << endl;
             for (auto student : group->getStudents()) {
                 cout << "ID: " << student->getId() << endl;
@@ -112,7 +114,10 @@ void Deanary::saveData(const std::string &path) {
     if (file.is_open()) {
         for (auto group : groups) {
             for (auto student : group->getStudents()) {
-                file << student->getId() << " " << student->getFio() << " " << group->getTitle() << " " << group->getSpec() << " ";
+                file << student->getId() << " "
+                << student->getFio() << " "
+                << group->getTitle() << " "
+                << group->getSpec() << " ";
                 for (int mark : student->getMarks()) {
                     file << mark << " ";
                 }

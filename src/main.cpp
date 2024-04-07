@@ -6,8 +6,6 @@
 #include "Student.h"
 #include "Group.h"
 
-using namespace std;
-
 int main() {
     Deanary deanary;
 

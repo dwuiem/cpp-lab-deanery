@@ -32,7 +32,7 @@ void Group::chooseHead(const Student &headRef) {
 double Group::getAverageMark() const {
     double markSummary = 0;
     double markAmount = 0;
-    for (const Student *student: students) {
+    for (const Student *student : students) {
         for (int mark : student->getMarks()) {
             markSummary += mark;
             markAmount++;
@@ -60,7 +60,7 @@ Group::Group() {
 }
 
 const Student *Group::getStudent(int id) {
-    for (const Student* student: students) {
+    for (const Student *student : students) {
         if (student->getId() == id) {
             return student;
         }
@@ -69,7 +69,7 @@ const Student *Group::getStudent(int id) {
 }
 
 const Student *Group::getStudent(std::string fio) {
-    for (const Student* student: students) {
+    for (const Student *student : students) {
         if (student->getFio() == fio) {
             return student;
         }
