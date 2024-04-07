@@ -6,14 +6,16 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <random>
+#include <ctime>
 
 #include "Student.h"
 #include "Group.h"
 #include "Deanary.h"
 
-void Deanary::hireStudents() {
+void Deanary::hireStudents(const std::string &path) {
     std::string line;
-    std::ifstream file("..\\bd\\students-data-set.txt");
+    std::ifstream file(path);
     if (file.is_open()) {
         while (std::getline(file, line)) {
             std::istringstream iss(line);
@@ -30,7 +32,7 @@ void Deanary::hireStudents() {
                 groups.push_back(group);
             }
             Student *student = new Student(id, fio);
-            student->addToGroup(*group);
+            group->addStudent(student);
             for (int i = 6; i < data.size(); i++) {
                 student->addMark(std::stoi(data[i]));
             }
@@ -40,46 +42,96 @@ void Deanary::hireStudents() {
 }
 
 void Deanary::fireStudents() {
-
+    for (Group *group : groups) {
+        for (const Student *student : group->getStudents()) {
+            if (student->getAverageMark() < 3.5) {
+                group->removeStudent(const_cast<Student *>(student));
+            }
+        }
+    }
+    saveData();
 }
 
 void Deanary::addMarksToAll() {
-
+    std::mt19937 rng(std::time(nullptr));
+    std::uniform_int_distribution<int> dist(1, 10);
+    for (auto group : groups) {
+        for (auto student : group->getStudents()) {
+            int newMark = dist(rng);
+            const_cast<Student *>(student)->addMark(newMark);
+        }
+    }
+    saveData();
 }
 
-void Deanary::getStatistics() {
-
+void Deanary::moveStudents(const std::string &oldGroup, const std::string &newGroup) {
+    Group *g1 = getGroup(oldGroup);
+    Group *g2 = getGroup(newGroup);
+    if (g1 == nullptr || g2 == nullptr) return;
+    for (auto student : g1->getStudents()) {
+        g2->addStudent(const_cast<Student *>(student));
+        g1->removeStudent(const_cast<Student *>(student));
+    }
+    saveData();
 }
 
-void Deanary::moveStudents() {
-
-}
+/* This method print info about all students in all group in form:
+ * Group - ... (spec: ...) - HEAD: ...
+ * AVG mark of group: ...
+ * ID: ...
+ * -> Name: ...
+ * -> Marks: ...
+ * -> AVG Mark: ...
+ */
 
 void Deanary::printInfo() {
     using std::cout, std::cin, std::endl;
-    for (auto group: groups) {
-        cout << "Group - " << group->title << "(spec: " << group->spec << "):" << endl;
-        for (auto student: group->students) {
-            cout << "ID: " << student->id << endl;
-            cout << "-> Name: " << student->fio << endl;
-            cout << "-> Marks: ";
-            for (int mark : student->marks) {
-                cout << mark << " ";
+    cout << "---------------------- DEANERY INFO ----------------------" << endl;
+    for (auto group : groups) {
+        if (!group->isEmpty()) {
+            cout << "Group - " << group->getTitle() << " (spec: " << group->getSpec() << ") - HEAD: "
+                 << (group->getHead() == nullptr ? "NONE" : group->getHead()->getFio()) << endl;
+            cout << "AVG mark of group: " << group->getAverageMark() << endl;
+            for (auto student : group->getStudents()) {
+                cout << "ID: " << student->getId() << endl;
+                cout << "-> Name: " << student->getFio() << endl;
+                cout << "-> Marks: ";
+                for (int mark : student->getMarks()) {
+                    cout << mark << " ";
+                }
+                cout << endl;
+                cout << "-> AVG Mark: " << student->getAverageMark() << endl;
             }
-            cout << endl;
         }
     }
 }
 
-void Deanary::saveData() {
-
+void Deanary::saveData(const std::string &path) {
+    std::ofstream file;
+    file.open(path);
+    if (file.is_open()) {
+        for (auto group : groups) {
+            for (auto student : group->getStudents()) {
+                file << student->getId() << " " << student->getFio() << " " << group->getTitle() << " " << group->getSpec() << " ";
+                for (int mark : student->getMarks()) {
+                    file << mark << " ";
+                }
+                file << std::endl;
+            }
+        }
+        file.close();
+    }
 }
 
 Group *Deanary::getGroup(const std::string &title) {
-    for (Group *g: groups) {
-        if (g->title == title) {
+    for (Group *g : groups) {
+        if (g->getTitle() == title) {
             return g;
         }
     }
     return nullptr;
+}
+
+std::vector<Group *> Deanary::getGroups() const {
+    return groups;
 }

@@ -9,7 +9,6 @@
 #include "Group.h"
 
 void Student::addToGroup(Group &groupRef) {
-    groupRef.addStudent(*this);
     this->group = &groupRef;
 }
 
@@ -17,7 +16,7 @@ void Student::addMark(int mark) {
     marks.push_back(mark);
 }
 
-double Student::getAverageMark() {
+double Student::getAverageMark() const {
     double markSummary = 0;
     for (int mark : marks) {
         markSummary += mark;
@@ -25,11 +24,27 @@ double Student::getAverageMark() {
     return markSummary / marks.size();
 }
 
-bool Student::isHeadOfGroup() {
-    return (this->group->head == this);
+bool Student::isHeadOfGroup() const {
+    return (group->getHead() == this);
 }
 
 Student::Student() {
     id = -1;
     fio = "";
+}
+
+int Student::getId() const {
+    return id;
+}
+
+std::string Student::getFio() const {
+    return fio;
+}
+
+const Group *Student::getGroup() const {
+    return group;
+}
+
+std::vector<int> Student::getMarks() const {
+    return marks;
 }

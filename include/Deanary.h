@@ -14,25 +14,25 @@ class Deanary {
 private:
     std::vector<Group *> groups;
 
-    void saveData();
-
-    Group *getGroup(const std::string& title);
+    void saveData(const std::string &path = "..\\bd\\students-data-set.txt");
 
 public:
 
+    Group *getGroup(const std::string &title);
+
     Deanary() = default;
 
-    void hireStudents();
+    void hireStudents(const std::string &path);
 
     void fireStudents();
 
     void addMarksToAll();
 
-    void getStatistics();
-
-    void moveStudents();
-
     void printInfo();
+
+    void moveStudents(const std::string &oldGroup, const std::string &newGroup);
+
+    std::vector<Group *> getGroups() const;
 };
 
 

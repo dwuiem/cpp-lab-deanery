@@ -12,11 +12,6 @@ class Student;
 
 class Group {
 public:
-    std::string title;
-    std::string spec;
-    std::vector<Student *> students;
-    const Student *head = nullptr;
-
     Group();
 
     Group(std::string title, std::string spec) : title(std::move(title)), spec(std::move(spec)) {};
@@ -29,9 +24,9 @@ public:
 
     Group &operator=(const Group &other) = default;
 
-    void addStudent(Student &studentRef);
+    void addStudent(Student *studentRef);
 
-    void removeStudent(Student &studentRef);
+    void removeStudent(Student *studentRef);
 
     void chooseHead(const Student &headRef);
 
@@ -43,9 +38,23 @@ public:
 
     bool containsStudent(std::string fio);
 
-    Student *getStudent(int id);
+    const Student *getStudent(int id);
 
-    Student *getStudent(std::string fio);
+    const Student *getStudent(std::string fio);
+
+    std::string getTitle() const;
+
+    std::string getSpec() const;
+
+    std::vector<const Student *> getStudents() const;
+
+    const Student* getHead() const;
+
+private:
+    std::string title;
+    std::string spec;
+    std::vector<const Student *> students;
+    const Student *head = nullptr;
 };
 
 

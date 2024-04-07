@@ -25,13 +25,22 @@ public:
 
     void addMark(int mark);
 
-    double getAverageMark();
+    bool isHeadOfGroup() const;
 
-    bool isHeadOfGroup();
+    double getAverageMark() const;
 
+    int getId() const;
+
+    std::string getFio() const;
+
+    const Group* getGroup() const;
+
+    std::vector<int> getMarks() const;
+
+private:
     std::string fio;
     int id;
-    Group *group = nullptr;
+    const Group *group = nullptr;
     std::vector<int> marks;
 };
 

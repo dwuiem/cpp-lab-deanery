@@ -8,17 +8,17 @@
 #include "Group.h"
 #include "Student.h"
 
-void Group::addStudent(Student &studentRef) {
-    students.push_back(&studentRef);
+void Group::addStudent(Student *studentRef) {
+    students.push_back(studentRef);
+    studentRef->addToGroup(*this);
 }
 
-void Group::removeStudent(Student &studentRef) {
-    studentRef.group = nullptr;
-    if (this->head == &studentRef) {
-        this->head = nullptr;
+void Group::removeStudent(Student *studentRef) {
+    if (studentRef->isHeadOfGroup()) {
+        head = nullptr;
     }
-    for (auto iter = students.begin(); iter != students.end(); ++iter) {
-        if (*iter == &studentRef) {
+    for (auto iter = students.begin(); iter != students.end(); iter++) {
+        if (*iter == studentRef) {
             students.erase(iter);
             break;
         }
@@ -33,7 +33,7 @@ double Group::getAverageMark() const {
     double markSummary = 0;
     double markAmount = 0;
     for (const Student *student: students) {
-        for (int mark: student->marks) {
+        for (int mark : student->getMarks()) {
             markSummary += mark;
             markAmount++;
         }
@@ -46,32 +46,49 @@ bool Group::isEmpty() const {
 }
 
 bool Group::containsStudent(int id) {
-    return getStudent(id) == nullptr;
+    return getStudent(id) != nullptr;
 }
 
 bool Group::containsStudent(std::string fio) {
-    return getStudent(fio) == nullptr;
+    return getStudent(fio) != nullptr;
 }
 
 Group::Group() {
     title = "";
     spec = "";
+    head = nullptr;
 }
 
-Student *Group::getStudent(int id) {
-    for (auto student : students) {
-        if (student->id == id) {
+const Student *Group::getStudent(int id) {
+    for (const Student* student: students) {
+        if (student->getId() == id) {
             return student;
         }
     }
     return nullptr;
 }
 
-Student *Group::getStudent(std::string fio) {
-    for (auto student: students) {
-        if (student->fio == fio) {
+const Student *Group::getStudent(std::string fio) {
+    for (const Student* student: students) {
+        if (student->getFio() == fio) {
             return student;
         }
     }
     return nullptr;
+}
+
+std::string Group::getTitle() const {
+    return title;
+}
+
+std::string Group::getSpec() const {
+    return spec;
+}
+
+std::vector<const Student *> Group::getStudents() const {
+    return students;
+}
+
+const Student *Group::getHead() const {
+    return head;
 }
